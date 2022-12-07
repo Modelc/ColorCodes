@@ -1,0 +1,129 @@
+<!-- index.html -->
+<html>
+  <head>
+    <title>Color Generator</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: black;
+      }
+
+      nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        background-color: #333;
+        color: white;
+      }
+
+      #color-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-row-gap: 10px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .color-box {
+        cursor: pointer;
+        width: 100px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .color-box:hover {
+        position: relative;
+      }
+
+      .color-box:hover:after {
+        content: attr(data-hex);
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background-color: white;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h1>Choose Color</h1>
+    </nav>
+    <div id="color-container"></div>
+    <script>
+      const colorContainer = document.getElementById("color-container");
+
+      for (let i = 0; i < 100; i++) {
+        // Generate a random color code in the hexadecimal format
+        const colorCode =
+          "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+        // Create a new "color-box" div element and set its background color to the generated color code
+        const colorBox = document.createElement("div");
+        colorBox.classList.add("color-box");
+        colorBox.style.backgroundColor = colorCode;
+        colorBox.setAttribute("data-hex", colorCode);
+
+        // Add a button to the "color-box" div element that, when clicked, copies the corresponding color code to the user's clipboard and displays a notification
+        const copyButton = document.createElement("button");
+        copyButton.innerHTML = "Copy Color Code";
+        copyButton.addEventListener("click", () => {
+          const colorCode = colorBox.getAttribute("data-hex");
+          navigator.clipboard.writeText(colorCode);
+
+          // Display a "toast" notification
+          const toast = document.createElement("div");
+          toast.innerHTML = `Color code ${colorCode} copied to clipboard!`;
+          toast.classList.add("toast");
+          document.body.appendChild(toast);
+
+          // Remove the "toast" div element after 3 seconds
+          setTimeout(() => {
+            document.body.removeChild(toast);
+          }, 3000);
+        });
+        colorBox.appendChild(copyButton);
+
+        // Add the "color-box" div element to the "color-container" div element
+        colorContainer.appendChild(colorBox);
+      }
+
+      // Use the :hover pseudo-class in CSS to make the "Copy Color Code" button visible only when the user hovers over the corresponding "color-box" div element
+      const css = `
+.color-box {
+  width: 16.666%;  /* Set the width to 1/6 of the container */
+  margin: 0;  /* Remove any space between the elements */
+  float: left;  /* Float the elements to the left */
+}
+
+.color-box:hover button {
+  display: block;
+}
+
+button {
+  display: none;
+}
+
+.toast {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 20px;
+  border-radius: 5px;
+}
+`;
+      const styleElement = document.createElement("style");
+      styleElement.innerHTML = css;
+      document.head.appendChild(styleElement);
+
+      const styleElement = document.createElement("style");
+      styleElement.innerHTML = css;
+      document.head.appendChild(styleElement);
+    </script>
+  </body>
+</html>

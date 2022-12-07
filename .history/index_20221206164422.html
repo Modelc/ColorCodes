@@ -1,0 +1,84 @@
+<!-- index.html -->
+<html>
+  <head>
+    <title>Color Generator</title>
+    <style>
+      body {
+        margin: 0;
+        background-color: black;
+      }
+
+      nav {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        background-color: #333;
+        color: white;
+      }
+
+      #color-container {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        grid-row-gap: 10px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .color-box {
+        cursor: pointer;
+        width: 100px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .color-box:hover {
+        position: relative;
+      }
+
+      .color-box:hover:after {
+        content: attr(data-hex);
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        background-color: white;
+        padding: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <h1>Choose Color</h1>
+    </nav>
+    <div id="color-container"></div>
+    <script>
+      const colorContainer = document.getElementById("color-container");
+
+      for (let i = 0; i < 100; i++) {
+        // Generate a random color code in the hexadecimal format
+        const colorCode =
+          "#" + Math.floor(Math.random() * 16777215).toString(16);
+
+        // Create a new "color-box" div element and set its background color to the generated color code
+        const colorBox = document.createElement("div");
+        colorBox.classList.add("color-box");
+        colorBox.style.backgroundColor = colorCode;
+        colorBox.setAttribute("data-hex", colorCode);
+
+        // Add a button to the "color-box" div element that, when clicked, copies the corresponding color code to the user's clipboard
+        const copyButton = document.createElement("button");
+        copyButton.innerHTML = "Copy Color Code";
+        copyButton.addEventListener("click", () => {
+          const colorCode = colorBox.getAttribute("data-hex");
+          navigator.clipboard.writeText(colorCode);
+        });
+        colorBox.appendChild(copyButton);
+
+        // Add the "color-box" div element to the "color-container" div element
+        colorContainer.appendChild(colorBox);
+      }
+    </script>
+  </body>
+</html>
